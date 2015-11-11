@@ -67,6 +67,20 @@ ScrambleController.prototype = {
             F: 'L'
           },
 
+          "y2": {
+            R: 'L',
+            L: 'R',
+            B: 'F',
+            F: 'B'
+          },
+
+          "y'": {
+            R: 'B',
+            L: 'F',
+            B: 'L',
+            F: 'R'
+          },
+
           x: {
             U: 'F',
             D: 'B',
@@ -81,11 +95,32 @@ ScrambleController.prototype = {
             F: 'U'
           },
 
+          "x2:" {
+            U: 'D',
+            D: 'U',
+            F: 'B',
+            B: 'F'
+          },
+
           z: {
             R: 'D',
             U: 'R',
             L: 'U',
             D: 'L'
+          },
+
+          "z2": {
+            R: 'L',
+            U: 'D',
+            L: 'R',
+            D: 'U'
+          },
+
+          "z'": {
+            R: 'U',
+            U: 'L',
+            L: 'D',
+            D: 'R'
           }
         };
 
