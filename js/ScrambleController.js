@@ -95,7 +95,7 @@ ScrambleController.prototype = {
             F: 'U'
           },
 
-          "x2:" {
+          "x2": {
             U: 'D',
             D: 'U',
             F: 'B',
