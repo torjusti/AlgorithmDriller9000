@@ -197,9 +197,6 @@ AlgorithmController.prototype = {
         var alg = algsInSet[j];
         var algorithmBox = document.createElement('div');
         algorithmBox.className = 'alg-box';
-        var algorithmImage = document.createElement('img');
-        algorithmImage.src = 'http://cube.crider.co.uk/visualcube.php?size=100&pzl=3&case=' + alg.alg + '&fmt=png&view=plan';
-        algorithmBox.appendChild(algorithmImage);
         var algorithmName = document.createElement('p');
         algorithmName.className = 'alg-name';
         algorithmName.innerHTML = alg.alg;
