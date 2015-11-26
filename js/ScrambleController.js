@@ -44,7 +44,7 @@ ScrambleController.prototype = {
           algorithm: true
         };
 
-        var normalizedAlgorithm = randomAlgWithAuf.replace("U2'", "U2").split(/ +/);
+        var normalizedAlgorithm = randomAlgWithAuf.replace("2'", "2").split(/ +/);
 
         var translateWideMoves = {
           r: "R M'",
