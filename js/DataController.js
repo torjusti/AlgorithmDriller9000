@@ -131,7 +131,7 @@ DataController.HistoryView.prototype = {
           self._deleteTime(i);
         });
         result.appendChild(deleteResultButton);
-        self._container.appendChild(result);
+        self._container.insertBefore(result, self._container.firstChild);
       })(i);
     }
   }
