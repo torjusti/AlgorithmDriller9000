@@ -52,6 +52,8 @@ TimerController.prototype = {
   },
 
   endTiming: function() {
+    // Force a last update so that the time display and history display are in sync.
+    this._timerView.updateDisplay(this._getCurrentTime());
     this._attemptFinished(this._getCurrentTime());
     this._isTiming = false;
   }
