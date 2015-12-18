@@ -121,17 +121,44 @@ DataController.HistoryView.prototype = {
 
     for (var i = 0; i < data.length; i++) {
       (function(i) {
-        var result = document.createElement('div');
+        var result = document.createElement('a');
         result.className = 'history-elem';
-        result.innerHTML = data[i][0] + ' - ' + data[i][1];
-        var deleteResultButton = document.createElement('button');
-        deleteResultButton.className = 'delete-result';
-        deleteResultButton.innerHTML = 'delete';
-        deleteResultButton.addEventListener('click', function() {
-          self._deleteTime(i);
+        result.innerHTML = data[i][0];
+
+        if (i < data.length && i > 0) {
+          self._container.innerHTML += ', ';
+        }
+
+        self._container.appendChild(result);
+      })(i);
+    }
+
+    // We need to add the event listeners in a separate loop for some reason.
+    var elems = self._container.getElementsByTagName('a');
+    for (var i = 0; i < elems.length; i++) {
+      (function(i) {
+        console.log('adding to ',i, elems.length, elems.length - 1 - i)
+        elems[i].addEventListener('click', function() {
+          vex.dialog.open({
+            message: data[i][0] + ' - ' + data[i][1],
+            buttons: [
+              $.extend({}, vex.dialog.buttons.NO, {
+                text: 'Close',
+                click: function() {
+                  vex.close();
+                }
+              }),
+
+              $.extend({}, vex.dialog.buttons.NO, {
+                text: 'Delete',
+                click: function() {
+                  self._deleteTime(i);
+                  vex.close();
+                }
+              })
+            ]
+          });
         });
-        result.appendChild(deleteResultButton);
-        self._container.insertBefore(result, self._container.firstChild);
       })(i);
     }
   }
@@ -184,8 +211,6 @@ DataController.SessionView.prototype = {
 
     this._sessionSelector.appendChild(newSessionOption);
     this._sessionSelector.appendChild(deleteSessionOption);
-
-    console.log(previousSelectedIndex);
 
     if (previousSelectedIndex === -1 || (previousSelectedIndex > (this._sessionSelector.length - 1))) {
       this._sessionSelector.selectedIndex = this._sessionSelector.options.length - 3;

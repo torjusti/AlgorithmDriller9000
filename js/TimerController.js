@@ -28,10 +28,11 @@ TimerController.prototype = {
   },
 
   initializeTimer: function() {
-    this._timerView.setWaiting();
+    this._timerView.setWaiting(true);
   },
 
   startTimer: function() {
+    this._timerView.setWaiting(false);
     this._startTime = (new Date()).getTime();
     this._isTiming = true;
 

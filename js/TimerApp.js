@@ -57,6 +57,7 @@ var TimerApp = function(config) {
       if (e.keyCode === 32 && !isWaiting && !isRunning) {
         self._timerController.updateState(TimerController.States.WAITING);
         isWaiting = true;
+
       } else if (isRunning) {
         self._timerController.updateState(TimerController.States.IDLE);
         isRunning = false;

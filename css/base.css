@@ -1,37 +1,177 @@
+/*
+ * Font faces.
+ */
+
+@font-face {
+  src: url("./fonts/digital-7.ttf") format("truetype");
+  font-family: digital-7-mono;
+}
+
+/*
+ * Big elements, default stylings.
+ */
+
+html, body, #container {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   margin: 0;
   font-family: Helvetica, "Tahoma", sans-serif;
+  display: flex;
+  flex-flow: row wrap;
 }
 
 header {
   background: #4285f4;
   color: #FFF;
   padding: 2em;
+  width: 100%;
 }
 
 header > *:not(:first-child) {
   margin-left: 2em;
 }
 
-main {
-  margin: 0 auto;
-  width: 85%;
-  margin-top: 2em;
+/*
+ * Grid setup.
+ */
+
+#container {
+  display: flex;
 }
 
-#display {
-  font-size: 5em;
-  text-align: center;
+main {
+  flex: 3 0;
+  padding: 1em;
 }
+
+aside {
+  flex: 1 0;
+  display: flex;
+}
+
+#algorithms {
+  width: 100%;
+}
+
+#algorithms > div {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#algorithms > div > h2 {
+  width: 100%;
+}
+
+/*
+ * Algorithm styling and layout.
+ */
 
 .alg-box {
   background: #EEE;
   border: 1px solid #777;
-  display: inline-block;
   padding: 1em;
+  flex: 1 1 325px;
+  margin-left: -1px;
+  margin-top: -1px;
+}
+
+#algorithm-sets {
+  width: 100%;
+  margin-top: 6em;
+}
+
+#algorithm-sets > button {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#algorithm-sets > div {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#algorithms > button {
+    margin-top: 1em;
+}
+
+.set-box {
+  background: #EEE;
+  border: 1px solid #777;
+  padding: 1em;
+  flex: 1 1 325px;
+  margin-left: -1px;
+  margin-top: -1px;
+}
+
+.set-box button:not(:first-child) {
+  margin-left: 1em;
+}
+
+/*
+ * Sidebar.
+ */
+
+aside {
+  background: rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 10px #000 inset;
+  padding: 20px;
+  color: #FFF;
 }
 
 #history {
-  height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+#history a {
+  cursor: pointer;
+}
+
+#history a:hover {
+  text-decoration: underline;
+}
+
+/*
+ * Main window.
+ */
+
+.select-bar {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, .25);
+  padding: 0.5em;
+}
+
+.select-bar select {
+  color: #FFF;
+  height: 1.5em;
+  cursor: pointer;
+  vertical-align: middle;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.select-bar select option {
+  background: #4285f4;
+}
+
+#scramble {
+  font-size: 1.5em;
+}
+
+#display {
+  font-size: 8em;
+  text-align: center;
+  width: 100%;
+  font-family: digital-7-mono;
+}
+
+#display.active {
+  color: #50C223;
 }
