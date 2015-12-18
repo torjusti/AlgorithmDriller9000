@@ -231,6 +231,6 @@ ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, sc
 
 ScrambleController.ScrambleView.prototype = {
   updateScrambleDisplay: function(value) {
-    this._scrambleDisplay.innerHTML = value;
+    this._scrambleDisplay.innerHTML = '<a target="_blank" href="https://alg.cubing.net/?setup=R' + value + '">' + value + '</a>';
   }
 };

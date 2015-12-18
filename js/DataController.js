@@ -138,7 +138,8 @@ DataController.HistoryView.prototype = {
       (function(i) {
         elems[i].addEventListener('click', function() {
           vex.dialog.open({
-            message: data[i][0] + ' - ' + data[i][1],
+            message: data[i][0] + ' - <a target="_blank" href="https://alg.cubing.net/?setup=R' + data[i][1] + '">' + data[i][1] + '</a>',
+
             buttons: [
               $.extend({}, vex.dialog.buttons.NO, {
                 text: 'Close',

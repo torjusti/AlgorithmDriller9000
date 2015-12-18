@@ -23,17 +23,6 @@ body {
   flex-flow: row wrap;
 }
 
-header {
-  background: #4285f4;
-  color: #FFF;
-  padding: 2em;
-  width: 100%;
-}
-
-header > *:not(:first-child) {
-  margin-left: 2em;
-}
-
 /*
  * Grid setup.
  */
@@ -137,6 +126,17 @@ aside {
  * Main window.
  */
 
+ header {
+   background: #4285f4;
+   color: #FFF;
+   padding: 2em;
+   width: 100%;
+ }
+
+ header > *:not(:first-child) {
+   margin-left: 2em;
+ }
+
 .select-bar {
   border: 1px solid rgba(0, 0, 0, 0.25);
   background: rgba(255, 255, 255, .25);
@@ -171,6 +171,15 @@ header button {
 
 #scramble {
   font-size: 1.5em;
+}
+
+#scramble a {
+  color: #FFF;
+  text-decoration: none;
+}
+
+#scramble a:hover {
+  text-decoration: underline;
 }
 
 #display {
