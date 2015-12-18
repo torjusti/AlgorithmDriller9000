@@ -74,7 +74,6 @@ DataController.prototype = {
   },
 
   _deleteSession: function(i) {
-    console.log(this._sessionData);
     if (this._sessionData.length === 1) {
       alert('Cannot delete last session');
       return;
@@ -137,7 +136,6 @@ DataController.HistoryView.prototype = {
     var elems = self._container.getElementsByTagName('a');
     for (var i = 0; i < elems.length; i++) {
       (function(i) {
-        console.log('adding to ',i, elems.length, elems.length - 1 - i)
         elems[i].addEventListener('click', function() {
           vex.dialog.open({
             message: data[i][0] + ' - ' + data[i][1],
