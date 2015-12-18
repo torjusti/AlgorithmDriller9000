@@ -4,7 +4,7 @@
  * @param {Node} DOM node to store the scramble in.
  * @param {Node} Selection dropdown to pick scramble type from.
  */
-var ScrambleController = function(defaultScrambler, scrambleDisplay, scrambleSelector, scrambleUpdated) {
+var ScrambleController = function(defaultScrambler, scrambleDisplay, scrambleSelector, nextScrambleButton, scrambleUpdated) {
   var self = this;
 
   this._scrambler = defaultScrambler;
@@ -18,7 +18,12 @@ var ScrambleController = function(defaultScrambler, scrambleDisplay, scrambleSel
     self.generateScramble();
   }
 
-  this.scrambleView = new ScrambleController.ScrambleView(scrambleDisplay, scrambleSelector, scramblerUpdated);
+  // The view may call this function to force a new scramble. Used by the next scramble button.
+  function forceScrambleUpdate() {
+    self.generateScramble();
+  }
+
+  this.scrambleView = new ScrambleController.ScrambleView(scrambleDisplay, scrambleSelector, scramblerUpdated, nextScrambleButton, forceScrambleUpdate);
 
   this.selectScrambler(defaultScrambler);
 };
@@ -200,7 +205,7 @@ ScrambleController.prototype = {
   },
 };
 
-ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, scramblerUpdated) {
+ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, scramblerUpdated, nextScrambleButton, forceScrambleUpdate) {
   this._scrambleDisplay = scrambleDisplay;
   this._scrambleSelector = scrambleSelector;
 
@@ -217,6 +222,10 @@ ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, sc
 
   this._scrambleSelector.addEventListener('change', function() {
     scramblerUpdated(self._scrambleSelector.options[self._scrambleSelector.selectedIndex].text);
+  });
+
+  nextScrambleButton.addEventListener('click', function() {
+    forceScrambleUpdate();
   });
 };
 

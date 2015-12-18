@@ -17,7 +17,7 @@ var TimerApp = function(config) {
   }
 
   // Initialize a scramble controller.
-  this._scrambleController = new ScrambleController(config.DEFAULT_SCRAMBLER, config.scrambleDisplay, config.scrambleSelector, scrambleUpdated);
+  this._scrambleController = new ScrambleController(config.DEFAULT_SCRAMBLER, config.scrambleDisplay, config.scrambleSelector, config.nextScramble, scrambleUpdated);
 
   // Initialize a data controller.
   this._dataController = new DataController(config.history, config.statistics, config.sessionSelector);
@@ -78,6 +78,7 @@ var TimerApp = function(config) {
       isWaiting = false;
     }
   });
+
 };
 
 var timerApp = new TimerApp({
@@ -89,5 +90,6 @@ var timerApp = new TimerApp({
   display: document.getElementById('display'),
   statistics: document.getElementById('statistics'),
   history: document.getElementById('history'),
-  sessionSelector: document.getElementById('session')
+  sessionSelector: document.getElementById('session'),
+  nextScramble: document.getElementById('next-scramble')
 });
