@@ -209,7 +209,7 @@ ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, sc
   this._scrambleDisplay = scrambleDisplay;
   this._scrambleSelector = scrambleSelector;
 
-  var scrambleTypes = ['333', '222', '333bf', '333fm', '333ft', '333mbf', '333oh', '444', '444bf', '555', '555bf', '666', '777', 'clock', 'minx', 'skewb', 'sq1', 'edges', 'corners', 'cmll', 'lsll', 'zbll', '2gll', 'pll', 'zzls', 'alg'];
+  var scrambleTypes = ['333', '222', '333bf', '333fm', '333ft', '333mbf', '333oh', '444', '444bf', '555', '555bf', '666', '777', 'clock', 'minx', 'skewb', 'sq1', 'edges', 'corners', 'cmll', 'lsll', 'zbll', '2gll', 'pll', 'lse', 'zzls', 'alg'];
 
   // Propagate the scrambler dropdown.
   for (var i = 0; i < scrambleTypes.length; i++) {

@@ -11,11 +11,6 @@
  * Big elements, default stylings.
  */
 
-html, body, #container {
-  height: 100%;
-  width: 100%;
-}
-
 body {
   margin: 0;
   font-family: Helvetica, "Tahoma", sans-serif;
@@ -33,16 +28,10 @@ body {
 
 main {
   flex: 3 0;
-  padding: 1em;
 }
 
 aside {
   flex: 1 0;
-  display: flex;
-}
-
-#algorithms {
-  width: 100%;
 }
 
 #algorithms > div {
@@ -52,6 +41,11 @@ aside {
 
 #algorithms > div > h2 {
   width: 100%;
+}
+
+#algorithm-sets > div {
+  display: flex;
+  flex-flow: row wrap;
 }
 
 /*
@@ -68,18 +62,12 @@ aside {
 }
 
 #algorithm-sets {
-  width: 100%;
   margin-top: 6em;
 }
 
 #algorithm-sets > button {
   margin-top: 1em;
   margin-bottom: 1em;
-}
-
-#algorithm-sets > div {
-  display: flex;
-  flex-flow: row wrap;
 }
 
 #algorithms > button {
@@ -112,6 +100,8 @@ aside {
 
 #history {
   overflow-y: auto;
+  padding-top: 1em;
+  border-top: 1px solid #555;
 }
 
 #history a {
@@ -122,9 +112,40 @@ aside {
   text-decoration: underline;
 }
 
+#statistics {
+  border-bottom: 1px solid #000;
+  padding-bottom: 1em;
+}
+
+#statistics p {
+  margin: 0;
+}
+
+#statistics p:not(:first-child) {
+  margin-top: 10px;
+}
+
+#statistics a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#statisticsInner {
+  display: none;
+  margin-top: 10px;
+}
+
+#statisticsInner.visible {
+  display: block;
+}
+
 /*
  * Main window.
  */
+
+main {
+  padding: 1em;
+}
 
  header {
    background: #4285f4;
@@ -185,7 +206,6 @@ header button {
 #display {
   font-size: 8em;
   text-align: center;
-  width: 100%;
   font-family: digital-7-mono;
 }
 

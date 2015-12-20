@@ -1,3 +1,134 @@
+/*
+ * Calculates the mean of a given list of times.
+ */
+function mean(times) {
+  var sum = 0;
+
+  for (var i = 0; i < times.length; i++) {
+    if (Object.prototype.toString.call(times[i]) === '[object Array]') {
+      sum += times[i][0];
+    } else {
+      sum += times[i];
+    }
+  }
+
+  var average = sum / times.length;
+
+  return average.toFixed(3);
+}
+
+/*
+ * Removes the top and bottom 5 percentile before calculating the average of the remaining times.
+ */
+function calculateAverage(data, startPosition, numberOfTimes) {
+  var times = [];
+
+  for (var i = startPosition - numberOfTimes + 1; i <= startPosition; i++) {
+    if (Object.prototype.toString.call(data[i]) === '[object Array]') {
+      times.push(data[i][0]);
+    } else {
+      times.push(data[i]);
+    }
+  }
+
+  // The highest and lowest 5 percent of solves are removed.
+  var lowestPercentile = 5;
+  var highestPercentile = 95;
+
+  // Sort ascending.
+  times.sort(function(a, b) {
+    return a - b;
+  });
+
+  var removedElements = times.splice(0, Math.ceil(lowestPercentile / 100 * numberOfTimes)).length;
+
+  var i = Math.ceil(highestPercentile / 100 * numberOfTimes) - 1 - removedElements;
+
+  times.splice(i, times.length - i);
+
+  return mean(times);
+}
+
+/*
+ * Locate the best average in a list of times.
+ */
+function calculateBestAverage(times, numberOfTimes, returnIndex) {
+  var bestAverage;
+  var bestAverageIndex;
+
+  for (var i = 0; i < times.length; i++) {
+    var average = calculateAverage(times, i, numberOfTimes);
+    if (!bestAverage || average < bestAverage) {
+      bestAverage = average;
+      bestAverageIndex = i;
+    }
+  }
+
+  if (returnIndex) {
+    return {
+      index: bestAverageIndex,
+      average: bestAverage
+    };
+  } else {
+    return bestAverage;
+  }
+}
+
+/*
+ * Downloads a file.
+ */
+function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click', true, true);
+        pom.dispatchEvent(event);
+    }  else {
+        pom.click();
+    }
+}
+
+/*
+ * Download an average as a file.
+ */
+function exportAverage(data, startPosition, numberOfTimes) {
+  var output = '';
+
+  output += 'Number of times: ' + numberOfTimes;
+  output += '\nAo' + numberOfTimes + ': ' + calculateAverage(data, startPosition, numberOfTimes);
+
+  output += '\n\nTimes:';
+
+  for (var i = startPosition - numberOfTimes + 1; i <= startPosition; i++) {
+    output += '\n' + data[i][0] + ' - ' + data[i][1];
+  }
+
+  download('AlgorithmDriller9000_SessionExport.txt', output);
+}
+
+/*
+ * Export all the results as a text file.
+ */
+function exportAllTimes(data) {
+  var output = '';
+
+  output += 'Number of times: ' + data.length;
+  output += '\n\nMean: ' + mean(data);
+  output += '\nAverage: ' + calculateAverage(data, data.length - 1, data.length);
+  output += '\n\nBest ao5: ' + calculateBestAverage(data, 5);
+  output += '\nBest ao12: ' + calculateBestAverage(data, 12);
+  output += '\n\nTimes:';
+
+  for (var i = 0; i < data.length; i++) {
+    output += '\n' + data[i][0] + ' - ' + data[i][1];
+  }
+
+  download('AlgorithmDriller9000_SessionExport.txt', output);
+}
+
 var DataController = function(history, statistics, sessionSelector) {
   var self = this;
 
@@ -15,7 +146,7 @@ var DataController = function(history, statistics, sessionSelector) {
 
   this.historyView = new DataController.HistoryView(history, timeDeleted);
 
-  this.statisticsView = new DataController.StatisticsView();
+  this.statisticsView = new DataController.StatisticsView(statistics);
 
   function selectedSessionUpdated(i) {
     self._selectSession(i);
@@ -163,13 +294,86 @@ DataController.HistoryView.prototype = {
   }
 };
 
-DataController.StatisticsView = function() {
-
+DataController.StatisticsView = function(statisticsContainer) {
+  this.statisticsContainer = statisticsContainer;
 };
 
 DataController.StatisticsView.prototype = {
   updateAllResults: function(data) {
+    var currentAo5, currentAo12, bestAo5, bestAo12, globalMean, average;
 
+    if (data.length >= 5) {
+      currentAo5 = calculateAverage(data, data.length - 1, 5);
+      bestAo5 = calculateBestAverage(data, 5, true);
+    }
+
+    if (data.length >= 12) {
+      currentAo12 = calculateAverage(data, data.length - 1, 12);
+      bestAo12 = calculateBestAverage(data, 12, true);
+    }
+
+    globalMean = mean(data);
+
+    average = calculateAverage(data, data.length - 1, data.length);
+
+    var data = '<p><a id="showStatistics">statistics: show</a><div id="statisticsInner">'
+
+    data += '<p><a id="timesCount">times: ' + data.length + '</a></p>';
+
+    data += '<p>mean: '+ globalMean + '</p>';
+
+    data += '<p>avg: '+ average + '</p>';
+
+    if (currentAo5) {
+      data += '<p><a id="currentAo5">ao5: ' + currentAo5 + '</a></p>';
+    }
+
+    if (currentAo12) {
+      data += '<p><a id="currentAo12">ao12: ' + currentAo12 + '</a></p>';
+    }
+
+    if (bestAo5) {
+      data += '<p><a id="bestAo5">best ao5: ' + bestAo5.average + '</a></p>';
+    }
+
+    if (bestAo12) {
+      data += '<p><a id="bestAo12">best ao12: ' + bestAo12.average + '</a></p>';
+    }
+
+    data += '</div>';
+
+    var currentInnerStatisticsClass = document.getElementById('statisticsInner');
+
+    if (currentInnerStatisticsClass) {
+      currentInnerStatisticsClass = currentInnerStatisticsClass.className;
+    }
+
+    this.statisticsContainer.innerHTML = data;
+
+    if (currentInnerStatisticsClass) {
+      document.getElementById('statisticsInner').className = currentInnerStatisticsClass;
+    }
+
+    document.getElementById('timesCount').addEventListener('click', function() {
+      exportAllTimes(data);
+    });
+
+    document.getElementById('currentAo5').addEventListener('click', function() {
+      exportAverage(data, data.length - 1, 5);
+    });
+
+    document.getElementById('bestAo5').addEventListener('click', function() {
+      exportAverage(data, bestAo5.index, 5);
+    });
+
+    document.getElementById('bestAo12').addEventListener('click', function() {
+      exportAverage(data, bestAo12.index, 12);
+    });
+
+
+    document.getElementById('showStatistics').addEventListener('click', function() {
+      document.getElementById('statisticsInner').classList.toggle('visible');
+    });
   }
 };
 
