@@ -77,7 +77,6 @@ var TimerApp = function(config) {
       isWaiting = false;
     }
   });
-
 };
 
 var timerApp = new TimerApp({
