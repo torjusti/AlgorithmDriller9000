@@ -160,7 +160,11 @@ var DataController = function(history, statistics, sessionSelector) {
     self._deleteSession();
   }
 
-  this.sessionView = new DataController.SessionView(sessionSelector, this._sessionData, selectedSessionUpdated, sessionCreated, sessionDeleted);
+  function sessionCleared() {
+    self._clearSession();
+  }
+
+  this.sessionView = new DataController.SessionView(sessionSelector, this._sessionData, selectedSessionUpdated, sessionCreated, sessionDeleted, sessionCleared);
 
   this._updateHistoryView();
   this._updateStatisticsView();
@@ -221,6 +225,22 @@ DataController.prototype = {
     this._selectLatestSession();
     this._saveSessionData();
     this._updateSessionView();
+  },
+
+  _clearSession: function(i) {
+    // If no index is provided, clear the current session.
+    if (typeof i !== 'number') {
+      i = this._currentSessionIndex;
+      var doUpdateSessionView = true;
+    }
+
+    this._sessionData[i] = [];
+    this._saveSessionData();
+
+    // Only update session view if the cleared session is visible.
+    if (doUpdateSessionView) {
+      this._updateSessionView();
+    }
   },
 
   addTime: function(time, scramble, isAlgorithm) {
@@ -389,7 +409,7 @@ DataController.StatisticsView.prototype = {
   }
 };
 
-DataController.SessionView = function(sessionSelector, defaultSessions, selectedSessionUpdated, sessionCreated, sessionDeleted) {
+DataController.SessionView = function(sessionSelector, defaultSessions, selectedSessionUpdated, sessionCreated, sessionDeleted, sessionCleared) {
   this._sessionSelector = sessionSelector;
 
   this._sessions = defaultSessions;
@@ -397,6 +417,7 @@ DataController.SessionView = function(sessionSelector, defaultSessions, selected
   this._selectedSessionUpdated = selectedSessionUpdated;
   this._sessionCreated = sessionCreated;
   this._sessionDeleted = sessionDeleted;
+  this._sessionCleared = sessionCleared;
 
   this.render();
 };
@@ -423,12 +444,15 @@ DataController.SessionView.prototype = {
     newSessionOption.innerHTML = 'create';
     var deleteSessionOption = document.createElement('option');
     deleteSessionOption.innerHTML = 'delete';
+    var clearSessionOption = document.createElement('option');
+    clearSessionOption.innerHTML = 'clear';
 
     this._sessionSelector.appendChild(newSessionOption);
     this._sessionSelector.appendChild(deleteSessionOption);
+    this._sessionSelector.appendChild(clearSessionOption);
 
     if (previousSelectedIndex === -1 || (previousSelectedIndex > (this._sessionSelector.length - 1))) {
-      this._sessionSelector.selectedIndex = this._sessionSelector.options.length - 3;
+      this._sessionSelector.selectedIndex = this._sessionSelector.options.length - 4;
     } else {
       this._sessionSelector.selectedIndex = previousSelectedIndex;
     }
@@ -441,6 +465,8 @@ DataController.SessionView.prototype = {
           self._sessionCreated();
         } else if (selectedText === 'delete') {
           self._sessionDeleted();
+        } else if (selectedText === 'clear') {
+          self._sessionCleared();
         } else {
           self._selectedSessionUpdated(selectedText);
         }
