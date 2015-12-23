@@ -343,7 +343,7 @@ DataController.StatisticsView.prototype = {
 
     average = calculateAverage(data, data.length - 1, data.length);
 
-    var outputText = '<p><a id="showStatistics">statistics: show</a><div id="statisticsInner">'
+    var outputText = '<p><a id="showStatistics">statistics: toggle</a><div id="statisticsInner">'
 
     outputText += '<p><a id="timesCount">times: ' + data.length + '</a></p>';
 
