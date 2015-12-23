@@ -1,8 +1,8 @@
-// global todo:
-// delete algorithms
-// algorithm normalizing in scrambler
-// styling
-
+/**
+ * The main timer constructor. Initializes all submodules and connects the dots.
+ * @param {Object} config An object containing configuration such as DOM elements to use.
+ * @constructor
+ */
 var TimerApp = function(config) {
   // Store a reference to the current object.
   var self = this;

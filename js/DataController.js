@@ -316,31 +316,31 @@ DataController.StatisticsView.prototype = {
 
     average = calculateAverage(data, data.length - 1, data.length);
 
-    var data = '<p><a id="showStatistics">statistics: show</a><div id="statisticsInner">'
+    var outputText = '<p><a id="showStatistics">statistics: show</a><div id="statisticsInner">'
 
-    data += '<p><a id="timesCount">times: ' + data.length + '</a></p>';
+    outputText += '<p><a id="timesCount">times: ' + data.length + '</a></p>';
 
-    data += '<p>mean: '+ globalMean + '</p>';
+    outputText += '<p>mean: '+ globalMean + '</p>';
 
-    data += '<p>avg: '+ average + '</p>';
+    outputText += '<p>avg: '+ average + '</p>';
 
     if (currentAo5) {
-      data += '<p><a id="currentAo5">ao5: ' + currentAo5 + '</a></p>';
+      outputText += '<p><a id="currentAo5">ao5: ' + currentAo5 + '</a></p>';
     }
 
     if (currentAo12) {
-      data += '<p><a id="currentAo12">ao12: ' + currentAo12 + '</a></p>';
+      outputText += '<p><a id="currentAo12">ao12: ' + currentAo12 + '</a></p>';
     }
 
     if (bestAo5) {
-      data += '<p><a id="bestAo5">best ao5: ' + bestAo5.average + '</a></p>';
+      outputText += '<p><a id="bestAo5">best ao5: ' + bestAo5.average + '</a></p>';
     }
 
     if (bestAo12) {
-      data += '<p><a id="bestAo12">best ao12: ' + bestAo12.average + '</a></p>';
+      outputText += '<p><a id="bestAo12">best ao12: ' + bestAo12.average + '</a></p>';
     }
 
-    data += '</div>';
+    outputText += '</div>';
 
     var currentInnerStatisticsClass = document.getElementById('statisticsInner');
 
@@ -348,7 +348,7 @@ DataController.StatisticsView.prototype = {
       currentInnerStatisticsClass = currentInnerStatisticsClass.className;
     }
 
-    this.statisticsContainer.innerHTML = data;
+    this.statisticsContainer.innerHTML = outputText;
 
     if (currentInnerStatisticsClass) {
       document.getElementById('statisticsInner').className = currentInnerStatisticsClass;
@@ -358,18 +358,23 @@ DataController.StatisticsView.prototype = {
       exportAllTimes(data);
     });
 
-    document.getElementById('currentAo5').addEventListener('click', function() {
-      exportAverage(data, data.length - 1, 5);
-    });
+    if (currentAo5) {
+      document.getElementById('currentAo5').addEventListener('click', function() {
+        exportAverage(data, data.length - 1, 5);
+      });
+    }
 
-    document.getElementById('bestAo5').addEventListener('click', function() {
-      exportAverage(data, bestAo5.index, 5);
-    });
+    if (bestAo5) {
+      document.getElementById('bestAo5').addEventListener('click', function() {
+        exportAverage(data, bestAo5.index, 5);
+      });
+    }
 
-    document.getElementById('bestAo12').addEventListener('click', function() {
-      exportAverage(data, bestAo12.index, 12);
-    });
-
+    if (bestAo12) {
+      document.getElementById('bestAo12').addEventListener('click', function() {
+        exportAverage(data, bestAo12.index, 12);
+      });
+    }
 
     document.getElementById('showStatistics').addEventListener('click', function() {
       document.getElementById('statisticsInner').classList.toggle('visible');

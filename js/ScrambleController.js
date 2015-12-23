@@ -1,8 +1,11 @@
-/*
- * @constructor
+/**
+ * Responsible for creating scrambles and for rendering them in the GUI.
  * @param {string} defaultScrambler The default scrambler to be selected.
- * @param {Node} DOM node to store the scramble in.
- * @param {Node} Selection dropdown to pick scramble type from.
+ * @param {Node} scrambleDisplay DOM node to store the scramble in.
+ * @param {Node} scrambleSelector Selection dropdown to pick scramble type from.
+ * @param {Node} nextScrambleButton A button that when clicked will jump to the next scramble.
+ * @param {Function} scrambleUpdated Called when a new scramble is created.
+ * @constructor
  */
 var ScrambleController = function(defaultScrambler, scrambleDisplay, scrambleSelector, nextScrambleButton, scrambleUpdated) {
   var self = this;
