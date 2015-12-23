@@ -156,8 +156,8 @@ var DataController = function(history, statistics, sessionSelector) {
     self._createSession();
   }
 
-  function sessionDeleted(i) {
-    self._deleteSession(i);
+  function sessionDeleted() {
+    self._deleteSession();
   }
 
   this.sessionView = new DataController.SessionView(sessionSelector, this._sessionData, selectedSessionUpdated, sessionCreated, sessionDeleted);
@@ -177,7 +177,7 @@ DataController.prototype = {
 
   _updateSessionView: function() {
     this.sessionView.updateSessionData(this._sessionData);
-    this.sessionView.render();
+    this.sessionView.render(this._currentSessionIndex);
   },
 
   _selectLatestSession: function() {
@@ -192,6 +192,8 @@ DataController.prototype = {
 
   _selectSession: function(i) {
     this._currentSession = this._sessionData[i];
+    this._currentSessionIndex = i;
+
     this._updateHistoryView();
     this._updateStatisticsView();
     this._updateSessionView();
@@ -208,6 +210,11 @@ DataController.prototype = {
     if (this._sessionData.length === 1) {
       alert('Cannot delete last session');
       return;
+    }
+
+    // If no index is provided, delete the current session.
+    if (typeof i !== 'number') {
+      i = this._currentSessionIndex;
     }
 
     this._sessionData.splice(i, 1);
@@ -433,7 +440,7 @@ DataController.SessionView.prototype = {
         if (selectedText === 'create') {
           self._sessionCreated();
         } else if (selectedText === 'delete') {
-          self._sessionDeleted(selectedText);
+          self._sessionDeleted();
         } else {
           self._selectedSessionUpdated(selectedText);
         }
