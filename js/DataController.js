@@ -186,6 +186,7 @@ DataController.prototype = {
 
   _selectLatestSession: function() {
     this._currentSession = this._sessionData[this._sessionData.length - 1];
+    this._currentSessionIndex = this._sessionData.length - 1;
   },
 
   _saveSessionData: function() {
@@ -223,6 +224,7 @@ DataController.prototype = {
 
     this._sessionData.splice(i, 1);
     this._selectLatestSession();
+
     this._saveSessionData();
     this._updateSessionView();
   },
@@ -231,16 +233,10 @@ DataController.prototype = {
     // If no index is provided, clear the current session.
     if (typeof i !== 'number') {
       i = this._currentSessionIndex;
-      var doUpdateSessionView = true;
     }
 
-    this._sessionData[i] = [];
+    this._sessionData[i] = this._currentSession = [];
     this._saveSessionData();
-
-    // Only update session view if the cleared session is visible.
-    if (doUpdateSessionView) {
-      this._updateSessionView();
-    }
   },
 
   addTime: function(time, scramble, isAlgorithm) {

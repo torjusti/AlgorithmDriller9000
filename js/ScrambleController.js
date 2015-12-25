@@ -208,6 +208,15 @@ ScrambleController.prototype = {
   },
 };
 
+/**
+ * Manages the scramble selection drop down menu and the scramble output box.
+ * @param {Node} scrambleDisplay The scramble output box.
+ * @param {Node} scrambleSelector The scramble selection drop down menu.
+ * @param {Function} scramblerUpdated Called when the current scramble type is updated.
+ * @param {Node} nextScrambleButton Button that forces a new scramble when pressed.
+ * @param {Function} forceScrambleUpdate Function that forces a new scramble.
+ * @constructor
+ */
 ScrambleController.ScrambleView = function(scrambleDisplay, scrambleSelector, scramblerUpdated, nextScrambleButton, forceScrambleUpdate) {
   this._scrambleDisplay = scrambleDisplay;
   this._scrambleSelector = scrambleSelector;
