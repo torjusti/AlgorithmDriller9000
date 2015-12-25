@@ -68,6 +68,7 @@ TimerController.TimerView.prototype = {
   setWaiting: function(waiting) {
     if (waiting) {
       this._display.classList.add('active');
+      this.updateDisplay('0.000');
     } else {
       this._display.classList.remove('active');
     }
