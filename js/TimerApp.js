@@ -89,5 +89,5 @@ var timerApp = new TimerApp({
   statistics: document.getElementById('statistics'),
   history: document.getElementById('history'),
   sessionSelector: document.getElementById('session'),
-  nextScramble: document.getElementById('next-scramble')
+  nextScramble: document.getElementById('next-scramble'),
 });

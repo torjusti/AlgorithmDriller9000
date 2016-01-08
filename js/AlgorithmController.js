@@ -1,3 +1,11 @@
+/**
+ * Manages the algorithm adding and removing functionality.
+ * @param {Array} storedAlgorithms Array of algs stored in the DataController.
+ * @param {Node} algorithmsContainer Contains the algorithm blocks.
+ * @param {Node} algorithmSetsContainer Contains the algorithm set blocks.
+ * @param {Function} algorithmsUpdated Called when an algorithm set is updated.
+ * @constructor
+ */
 var AlgorithmController = function(storedAlgorithms, algorithmsContainer, algorithmSetsContainer, algorithmsUpdated) {
   this._algorithmsUpdated = algorithmsUpdated;
 
@@ -61,6 +69,9 @@ AlgorithmController.prototype = {
     this._innerAlgContainer = algContainer;
   },
 
+  /**
+   * @param {boolean=} doNotRender Whether the algorithm view should be rerendered after propagating or not.
+   */
   _propagateUpdates: function(doNotRender) {
     this._algorithmsUpdated(this._getAlgorithms(), this._getEnabledAlgorithms());
     doNotRender || this._render();

@@ -49,8 +49,11 @@ function calculateAverage(data, startPosition, numberOfTimes) {
   return mean(times);
 }
 
-/*
+/**
  * Locate the best average in a list of times.
+ * @param {Array} times A list of times to consider.
+ * @param {number} numberOfTimes The size of the average.
+ * @param {boolean=} returnIndex Whether an index or a number should be returned.
  */
 function calculateBestAverage(times, numberOfTimes, returnIndex) {
   var bestAverage;
@@ -129,6 +132,9 @@ function exportAllTimes(data) {
   download('AlgorithmDriller9000_SessionExport.txt', output);
 }
 
+/**
+ * @constructor
+ */
 var DataController = function(history, statistics, sessionSelector) {
   var self = this;
 
@@ -181,7 +187,7 @@ DataController.prototype = {
 
   _updateSessionView: function() {
     this.sessionView.updateSessionData(this._sessionData);
-    this.sessionView.render(this._currentSessionIndex);
+    this.sessionView.render();
   },
 
   _selectLatestSession: function() {
@@ -211,6 +217,10 @@ DataController.prototype = {
     this._updateSessionView();
   },
 
+  /**
+   * Deletes a session.
+   * @param {number=} i The index of the session to delete. Assumes current session.
+   */
   _deleteSession: function(i) {
     if (this._sessionData.length === 1) {
       alert('Cannot delete last session');
@@ -229,6 +239,10 @@ DataController.prototype = {
     this._updateSessionView();
   },
 
+  /**
+   * Removes all times from a session without deleting the session.
+   * @param {number=} i The session to delete. If none, current session is assumed.
+   */
   _clearSession: function(i) {
     // If no index is provided, clear the current session.
     if (typeof i !== 'number') {
@@ -260,6 +274,9 @@ DataController.prototype = {
   }
 };
 
+/**
+ * @constructor
+ */
 DataController.HistoryView = function(container, deleteTime) {
   this._container = container;
 
@@ -317,6 +334,9 @@ DataController.HistoryView.prototype = {
   }
 };
 
+/**
+ * @constructor
+ */
 DataController.StatisticsView = function(statisticsContainer) {
   this.statisticsContainer = statisticsContainer;
 };
@@ -405,6 +425,9 @@ DataController.StatisticsView.prototype = {
   }
 };
 
+/**
+ * @constructor
+ */
 DataController.SessionView = function(sessionSelector, defaultSessions, selectedSessionUpdated, sessionCreated, sessionDeleted, sessionCleared) {
   this._sessionSelector = sessionSelector;
 
@@ -423,8 +446,6 @@ DataController.SessionView.prototype = {
     var self = this;
 
     var performingEdits = true;
-
-    this._sessionSelector.removeEventListener('change', this._onChange);
 
     var previousSelectedIndex = this._sessionSelector.selectedIndex;
 

@@ -1,3 +1,9 @@
+/**
+ * Manages the timer display and the clock powering it.
+ * @param {Node} display The timer display.
+ * @param {Function} attemptFinshed Called when a time is finished.
+ * @constructor
+ */
 var TimerController = function(display, attemptFinshed) {
   this._attemptFinished = attemptFinshed;
 
@@ -60,6 +66,11 @@ TimerController.prototype = {
   }
 };
 
+/**
+ * Manages the timer display.
+ * @param {Node} display The timer display.
+ * @constructor
+ */
 TimerController.TimerView = function(display) {
   this._display = display;
 };
