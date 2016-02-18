@@ -74,28 +74,85 @@ AlgorithmController.prototype = {
    */
   _propagateUpdates: function(doNotRender) {
     this._algorithmsUpdated(this._getAlgorithms(), this._getEnabledAlgorithms());
-    doNotRender || this._render();
+    this._updateSelectedAlgorithmSetIndicators(this._currentAlgorithmSet.name);
+
+    if (!doNotRender) {
+      this._render();
+    }
   },
 
   _getAlgorithms: function() {
     return this._algorithms;
   },
 
-  _getEnabledAlgorithms: function() {
+  /**
+   * Returns a list of all enabled algorithms in a set.
+   * @param{String=} setName The (optional) name of the set to get enabled algorithms from.
+   */
+  _getEnabledAlgorithms: function(setName) {
     var sets = this._algorithms;
     var enabledAlgs = [];
 
     for (var i = 0; i < sets.length; i++) {
       var algsInSet = sets[i].algorithms;
-      for (var j = 0; j < algsInSet.length; j++) {
-        var alg = algsInSet[j];
-        if (alg && alg.enabled) {
-          enabledAlgs.push(alg);
+
+      // If we have a set name, only check this set if it is the set we are looking for.
+      // If we find the set we are looking for, cancel the loop.
+      if (!setName || (sets[i].name === setName)) {
+        for (var j = 0; j < algsInSet.length; j++) {
+          var alg = algsInSet[j];
+          if (alg && alg.enabled) {
+            enabledAlgs.push(alg);
+          }
         }
+
+        // We found the alg set we were looking for, stop searching.
+        break;
       }
     }
 
     return enabledAlgs;
+  },
+
+  /**
+   * Returns the object of an algorithm set given its name.
+   * Behaviour for duplicate set names is currently undocumented. The first set will be returned.
+   * @param {string} setName The set name to find.
+   */
+  _getAlgorithmSetFromName: function(setName) {
+    var sets = this._algorithms;
+
+    for (var i = 0; i < sets.length; i++) {
+      if (sets[i].name === setName) {
+        return sets[i];
+      }
+    }
+
+    return false;
+  },
+
+  /**
+   * Checks whether a given set has enabled algorithms in it or not and returns a boolean.
+   * @param {String} setName The name of the set to check for enabled algorithms in.
+   * @returns {boolean}
+   */
+  _algorithmSetHasEnabledAlgorithms: function(setName) {
+    return this._getEnabledAlgorithms(setName).length > 0;
+  },
+
+  /**
+   * Checks whether a given set has ALL of its algorithms enabled or not and returns a boolean.
+   * @param {String} setName The name of the set to check for enabled algorithms in.
+   * @param {boolean=} allowEmpty If true, empty sets will count.
+   * @returns {boolean}
+   */
+  _algorithmSetHasOnlyEnabledAlgorithms: function(setName, allowEmpty) {
+    // If the algorithm set is empty...
+    if (!allowEmpty && this._getAlgorithmSetFromName(setName).algorithms.length === 0) {
+      return false;
+    }
+
+    return this._getEnabledAlgorithms(setName).length === this._getAlgorithmSetFromName(setName).algorithms.length;
   },
 
   _selectLatestAlgorithmSet: function() {
@@ -143,7 +200,6 @@ AlgorithmController.prototype = {
   },
 
   _setAlgorithmEnabled: function(index, value) {
-    console.log('toggling', index, value)
     this._currentAlgorithmSet.algorithms[index].enabled = value;
     this._propagateUpdates(true);
   },
@@ -158,6 +214,48 @@ AlgorithmController.prototype = {
     this._propagateUpdates();
   },
 
+  /**
+   * Locates the DOM node for the button that selects an algorithm set.
+   * @param {string} setName The name of the algoritm set.
+   */
+  _locateAlgorithmSetBoxWithSetName: function(setName) {
+    var boxes = this._innerSetContainer.getElementsByClassName('set-box');
+
+    // The name of the box is set as the innerHTML, so we loop through and compare.
+    for (var i = 0; i < boxes.length; i++) {
+      if (boxes[i].getAttribute('data-set-name') === setName) {
+        return boxes[i];
+      }
+    }
+
+    return false;
+  },
+
+  /**
+   * When an algorithm set has selected algorithms, this should be indicated in the UI.
+   * This function updates the state of this UI indicator to dynamically enable or disable it.
+   * @param {string} setName The set to check the highlight status of.
+   */
+  _updateSelectedAlgorithmSetIndicators: function(setName) {
+    var setBox = this._locateAlgorithmSetBoxWithSetName(setName);
+
+    // algorithmSetHasOnlyEnabledAlgorithms does not count empty sets, so we do not need to do any extra work.
+    // See function definition for algorithmSetHasOnlyEnabledAlgorithms.
+    if (this._algorithmSetHasOnlyEnabledAlgorithms(setName)) {
+      setBox.classList.add('setBoxFullyEnabled');
+      setBox.classList.remove('setBoxEnabled');
+      setBox.classList.remove('setBoxDisabled');
+    } else if (this._algorithmSetHasEnabledAlgorithms(setName)) {
+      setBox.classList.add('setBoxEnabled');
+      setBox.classList.remove('setBoxDisabled');
+      setBox.classList.remove('setBoxFullyEnabled');
+    } else {
+      setBox.classList.add('setBoxDisabled');
+      setBox.classList.remove('setBoxEnabled');
+      setBox.classList.remove('setBoxFullyEnabled');
+    }
+  },
+
   _render: function() {
     var self = this;
 
@@ -170,6 +268,7 @@ AlgorithmController.prototype = {
         var setBox = document.createElement('div');
         setBox.className = 'set-box';
         var setName = algs[i].name;
+        setBox.setAttribute('data-set-name', setName);
         var algSetButton = document.createElement('button');
         algSetButton.innerHTML = algs[i].name;
         algSetButton.addEventListener('click', function() {
@@ -192,6 +291,8 @@ AlgorithmController.prototype = {
         setBox.appendChild(deleteAlgSetButton);
         setBox.appendChild(selectAlgSetButton);
         self._innerSetContainer.appendChild(setBox);
+
+        self._updateSelectedAlgorithmSetIndicators(setName);
       })(i);
     }
 

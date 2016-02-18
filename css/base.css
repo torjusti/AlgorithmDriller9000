@@ -83,6 +83,17 @@ aside {
   margin-top: -1px;
 }
 
+/*
+ * Highlight sets with enabled algorithms.
+ */
+.set-box.setBoxEnabled {
+  border-color: #4285f4;
+}
+
+.set-box.setBoxFullyEnabled {
+  border-color: #4BE813;
+}
+
 .set-box button:not(:first-child) {
   margin-left: 1em;
 }
